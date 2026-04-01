@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cakeflix — Where Binge-Worthy Meets Bakery</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink: #F8C8DC;
+    --pink-deep: #f0a5c3;
+    --cream: #FFF8F0;
+    --gold: #D4AF37;
+    --gold-light: #e8ca5a;
+    --charcoal: #2C2C2C;
+    --charcoal-soft: #5a5a5a;
+    --bg: #FAF6F0;
+    --white: #ffffff;
+    --shadow-soft: 0 8px 32px rgba(248,200,220,0.25);
+    --shadow-gold: 0 4px 20px rgba(212,175,55,0.2);
+    --radius: 12px;
+    --radius-lg: 20px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--pink-deep); border-radius: 3px; }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 5%;
+    background: rgba(250,246,240,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(248,200,220,0.3);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 4px 24px rgba(248,200,220,0.3); }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--charcoal);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 0.85rem; font-weight: 500;
+    color: var(--charcoal-soft); text-decoration: none;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    position: relative; padding-bottom: 4px;
+    transition: color 0.25s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 1.5px; background: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--charcoal); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    background: var(--gold); color: var(--white);
+    padding: 10px 24px; border-radius: 50px;
+    font-size: 0.82rem; font-weight: 600;
+    text-decoration: none; letter-spacing: 0.04em;
+    transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+    box-shadow: var(--shadow-gold);
+  }
+  .nav-cta:hover { background: #c9a52e; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(212,175,55,0.35); }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--charcoal); border-radius: 2px; transition: 0.3s; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; gap: 0;
+    padding-top: 80px;
+    overflow: hidden;
+  }
+
+  .hero-content {
+    padding: 80px 5% 80px 8%;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--pink); color: var(--charcoal);
+    padding: 8px 18px; border-radius: 50px;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .hero-badge::before { content: '🍰'; font-size: 1rem; }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    line-height: 1.15; font-weight: 700;
+    color: var(--charcoal); margin-bottom: 20px;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+
+  .hero-sub {
+    font-size: 1rem; color: var(--charcoal-soft);
+    line-height: 1.75; max-width: 420px; margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--gold); color: var(--white);
+    padding: 15px 36px; border-radius: 50px;
+    font-size: 0.9rem; font-weight: 600;
+    text-decoration: none; letter-spacing: 0.03em;
+    transition: all 0.25s; box-shadow: var(--shadow-gold);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: #c9a52e; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(212,175,55,0.4); }
+
+  .btn-outline {
+    background: transparent; color: var(--charcoal);
+    padding: 14px 32px; border-radius: 50px;
+    font-size: 0.9rem; font-weight: 500;
+    text-decoration: none;
+    border: 1.5px solid rgba(44,44,44,0.25);
+    transition: all 0.25s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  .hero-stats {
+    display: flex; gap: 36px; margin-top: 52px;
+    padding-top: 40px; border-top: 1px solid rgba(248,200,220,0.5);
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 700; color: var(--charcoal);
+  }
+  .stat-label { font-size: 0.75rem; color: var(--charcoal-soft); font-weight: 400; margin-top: 2px; }
+
+  .hero-visual {
+    position: relative; height: 100vh;
+    background: linear-gradient(135deg, var(--pink) 0%, #fde0ee 50%, var(--cream) 100%);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    animation: fadeIn 1s ease both 0.3s;
+  }
+
+  .hero-visual::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 60% 40%, rgba(212,175,55,0.12) 0%, transparent 70%);
+  }
+
+  .cake-display {
+    width: 340px; height: 340px; border-radius: 50%;
+    background: linear-gradient(145deg, var(--cream), var(--white));
+    box-shadow: 0 24px 80px rgba(248,200,220,0.5), 0 0 0 20px rgba(255,248,240,0.6), 0 0 0 40px rgba(248,200,220,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9rem;
+    animation: float 4s ease-in-out infinite;
+    position: relative; z-index: 2;
+  }
+
+  .cake-tag {
+    position: absolute; background: var(--white);
+    border-radius: var(--radius); padding: 12px 18px;
+    box-shadow: var(--shadow-soft);
+    font-size: 0.8rem; font-weight: 600; color: var(--charcoal);
+    display: flex; align-items: center; gap: 8px;
+    animation: float 4s ease-in-out infinite;
+  }
+  .cake-tag.tag-1 { top: 20%; left: 6%; animation-delay: -1s; }
+  .cake-tag.tag-2 { bottom: 22%; right: 5%; animation-delay: -2s; }
+  .cake-tag.tag-3 { top: 55%; left: 3%; animation-delay: -0.5s; }
+  .cake-tag .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 100px 5%; }
+
+  .section-label {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold);
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px;
+  }
+  .section-label::before, .section-label::after {
+    content: ''; flex: 1; max-width: 40px; height: 1px; background: var(--gold);
+  }
+  .section-label::before { display: none; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700; line-height: 1.2;
+    color: var(--charcoal); margin-bottom: 16px;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  .section-sub {
+    font-size: 0.95rem; color: var(--charcoal-soft);
+    max-width: 480px; line-height: 1.8; font-weight: 300;
+  }
+
+  /* ── FEATURES ── */
+  .features {
+    background: var(--cream);
+    padding: 60px 5%;
+  }
+  .features-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 2px; max-width: 1100px; margin: 0 auto;
+  }
+  .feature-card {
+    background: var(--white); padding: 40px 28px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .feature-card:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+  .feature-card:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+  .feature-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-soft); z-index: 1; position: relative; }
+  .feature-icon { font-size: 2.4rem; margin-bottom: 16px; display: block; }
+  .feature-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+  .feature-text { font-size: 0.8rem; color: var(--charcoal-soft); line-height: 1.7; font-weight: 300; }
+
+  /* ── GALLERY ── */
+  .gallery { background: var(--bg); }
+  .gallery-header { text-align: center; margin-bottom: 60px; }
+  .gallery-header .section-label { justify-content: center; }
+  .gallery-header .section-label::before { display: block; }
+
+  .gallery-tabs {
+    display: flex; justify-content: center; gap: 8px;
+    flex-wrap: wrap; margin-top: 32px;
+  }
+  .tab {
+    padding: 9px 22px; border-radius: 50px; cursor: pointer;
+    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.02em;
+    border: 1.5px solid rgba(44,44,44,0.15);
+    color: var(--charcoal-soft); background: transparent;
+    transition: all 0.25s;
+  }
+  .tab.active, .tab:hover { background: var(--gold); color: var(--white); border-color: var(--gold); }
+
+  .gallery-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px; margin-top: 40px; max-width: 1100px; margin-inline: auto;
+  }
+  .cake-card {
+    border-radius: var(--radius-lg); overflow: hidden;
+    background: var(--white);
+    box-shadow: 0 4px 20px rgba(248,200,220,0.15);
+    transition: transform 0.35s, box-shadow 0.35s;
+    cursor: pointer;
+  }
+  .cake-card:hover { transform: translateY(-8px); box-shadow: 0 16px 48px rgba(248,200,220,0.35); }
+  .cake-img {
+    height: 240px; display: flex; align-items: center; justify-content: center;
+    font-size: 5rem;
+    position: relative; overflow: hidden;
+  }
+  .cake-img::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(44,44,44,0.08));
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .cake-card:hover .cake-img::after { opacity: 1; }
+  .cake-info { padding: 20px; }
+  .cake-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+  .cake-desc { font-size: 0.78rem; color: var(--charcoal-soft); font-weight: 300; line-height: 1.6; }
+  .cake-price {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid rgba(248,200,220,0.4);
+  }
+  .price { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--gold); }
+  .order-mini {
+    background: var(--pink); color: var(--charcoal);
+    padding: 7px 16px; border-radius: 50px;
+    font-size: 0.72rem; font-weight: 600;
+    border: none; cursor: pointer;
+    transition: background 0.25s;
+  }
+  .order-mini:hover { background: var(--pink-deep); }
+
+  /* bg colors for cake cards */
+  .bg-pink { background: linear-gradient(135deg, #fde8f2, #fac5de); }
+  .bg-lav { background: linear-gradient(135deg, #ede8fd, #d5c8f8); }
+  .bg-mint { background: linear-gradient(135deg, #e8fdf0, #c8f0d8); }
+  .bg-peach { background: linear-gradient(135deg, #fef0e8, #f8d4b8); }
+  .bg-sky { background: linear-gradient(135deg, #e8f4fd, #c8dcf0); }
+  .bg-yellow { background: linear-gradient(135deg, #fdfce8, #f8f0c8); }
+
+  /* ── ORDER SECTION ── */
+  .order-section {
+    background: linear-gradient(135deg, var(--pink) 0%, #fde8f2 40%, var(--cream) 100%);
+    position: relative; overflow: hidden;
+  }
+  .order-section::before {
+    content: ''; position: absolute; top: -80px; right: -80px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: rgba(212,175,55,0.08);
+    pointer-events: none;
+  }
+  .order-inner {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: start; max-width: 1100px; margin: 0 auto;
+  }
+  .order-left { padding-right: 20px; }
+  .order-perks { margin-top: 40px; display: flex; flex-direction: column; gap: 16px; }
+  .perk {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 0.88rem; color: var(--charcoal-soft);
+  }
+  .perk-icon {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--white); display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(248,200,220,0.3);
+  }
+
+  .order-form {
+    background: var(--white); border-radius: var(--radius-lg);
+    padding: 44px; box-shadow: 0 20px 60px rgba(248,200,220,0.3);
+  }
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700; margin-bottom: 28px;
+    color: var(--charcoal);
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block; font-size: 0.75rem; font-weight: 600;
+    color: var(--charcoal-soft); margin-bottom: 8px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; padding: 13px 16px;
+    border: 1.5px solid rgba(248,200,220,0.5);
+    border-radius: var(--radius); background: var(--bg);
+    font-family: 'Poppins', sans-serif; font-size: 0.88rem;
+    color: var(--charcoal); transition: border-color 0.25s, box-shadow 0.25s;
+    outline: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.12);
+    background: var(--white);
+  }
+  .form-group textarea { resize: none; height: 80px; }
+
+  .upload-area {
+    border: 2px dashed rgba(248,200,220,0.7);
+    border-radius: var(--radius); padding: 28px 20px;
+    text-align: center; cursor: pointer;
+    transition: border-color 0.25s, background 0.25s;
+    background: var(--bg);
+  }
+  .upload-area:hover { border-color: var(--gold); background: rgba(212,175,55,0.04); }
+  .upload-area input { display: none; }
+  .upload-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+  .upload-text { font-size: 0.82rem; color: var(--charcoal-soft); }
+  .upload-text strong { color: var(--gold); }
+
+  .btn-whatsapp {
+    width: 100%; background: #25D366; color: var(--white);
+    padding: 16px; border-radius: 50px;
+    font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: background 0.25s, transform 0.2s;
+    margin-top: 20px; font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.02em;
+  }
+  .btn-whatsapp:hover { background: #20bb5c; transform: translateY(-2px); }
+  .whatsapp-icon { font-size: 1.2rem; }
+
+  /* ── ABOUT ── */
+  .about {
+    background: var(--charcoal);
+    color: var(--white); position: relative; overflow: hidden;
+  }
+  .about::before {
+    content: '"'; position: absolute; top: -20px; left: 4%;
+    font-family: 'Playfair Display', serif; font-size: 20rem; line-height: 1;
+    color: rgba(248,200,220,0.06); pointer-events: none;
+  }
+  .about-inner {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center; max-width: 1100px; margin: 0 auto;
+  }
+  .about .section-label { color: var(--pink); }
+  .about .section-label::after { background: var(--pink); }
+  .about .section-title { color: var(--white); }
+  .about-body {
+    font-size: 0.95rem; color: rgba(255,255,255,0.65);
+    line-height: 1.9; font-weight: 300; margin-bottom: 36px;
+  }
+  .about-body p + p { margin-top: 16px; }
+
+  .about-visual {
+    position: relative; display: flex;
+    align-items: center; justify-content: center;
+  }
+  .about-circle {
+    width: 320px; height: 320px; border-radius: 50%;
+    background: linear-gradient(135deg, rgba(248,200,220,0.15), rgba(212,175,55,0.1));
+    border: 1px solid rgba(248,200,220,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8rem;
+    animation: float 5s ease-in-out infinite;
+  }
+  .about-badge {
+    position: absolute; background: var(--gold);
+    border-radius: var(--radius); padding: 14px 20px;
+    color: var(--white); font-weight: 600; font-size: 0.88rem;
+  }
+  .about-badge.b1 { bottom: 20px; left: -20px; }
+  .about-badge.b2 { top: 30px; right: -20px; font-size: 0.8rem; background: var(--pink); color: var(--charcoal); }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { background: var(--cream); }
+  .testimonials-header { text-align: center; margin-bottom: 60px; }
+  .testimonials-header .section-label { justify-content: center; }
+  .testimonials-header .section-label::before { display: block; }
+
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; max-width: 1100px; margin: 0 auto;
+  }
+  .testi-card {
+    background: var(--white); border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    box-shadow: 0 4px 24px rgba(248,200,220,0.15);
+    position: relative; transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .testi-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(248,200,220,0.3); }
+  .testi-card::before {
+    content: '"'; position: absolute; top: 16px; right: 24px;
+    font-family: 'Playfair Display', serif; font-size: 5rem; line-height: 1;
+    color: var(--pink); opacity: 0.6;
+  }
+  .testi-stars { color: var(--gold); font-size: 1rem; margin-bottom: 16px; letter-spacing: 2px; }
+  .testi-text {
+    font-size: 0.88rem; line-height: 1.8;
+    color: var(--charcoal-soft); font-weight: 300; margin-bottom: 24px;
+    font-style: italic;
+  }
+  .testi-author { display: flex; align-items: center; gap: 14px; }
+  .author-avatar {
+    width: 46px; height: 46px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; flex-shrink: 0;
+  }
+  .author-name { font-weight: 600; font-size: 0.88rem; color: var(--charcoal); }
+  .author-loc { font-size: 0.75rem; color: var(--charcoal-soft); font-weight: 300; }
+
+  /* ── CONTACT ── */
+  .contact { background: var(--bg); }
+  .contact-inner {
+    display: grid; grid-template-columns: 1fr 1.2fr;
+    gap: 80px; align-items: start; max-width: 1100px; margin: 0 auto;
+  }
+  .contact-info { display: flex; flex-direction: column; gap: 28px; margin-top: 40px; }
+  .contact-item { display: flex; align-items: flex-start; gap: 18px; }
+  .contact-icon {
+    width: 48px; height: 48px; border-radius: var(--radius);
+    background: var(--pink); display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .contact-label { font-size: 0.72rem; font-weight: 600; color: var(--charcoal-soft); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .contact-val { font-size: 0.9rem; color: var(--charcoal); font-weight: 500; line-height: 1.5; }
+
+  .contact-map {
+    border-radius: var(--radius-lg); overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    height: 300px; background: var(--pink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; position: relative;
+  }
+  .map-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(248,200,220,0.6), rgba(253,232,242,0.4));
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  }
+  .map-pin { font-size: 3.5rem; animation: float 3s ease-in-out infinite; }
+  .map-label {
+    font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600;
+    color: var(--charcoal); background: var(--white);
+    padding: 10px 20px; border-radius: 50px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .whatsapp-float {
+    position: fixed; bottom: 28px; right: 28px; z-index: 99;
+    background: #25D366; color: var(--white);
+    width: 60px; height: 60px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; text-decoration: none;
+    box-shadow: 0 6px 24px rgba(37,211,102,0.4);
+    transition: transform 0.25s, box-shadow 0.25s;
+    animation: pulse-wa 2.5s ease infinite;
+  }
+  .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 10px 32px rgba(37,211,102,0.5); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--charcoal); color: rgba(255,255,255,0.55);
+    padding: 60px 5% 32px;
+  }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    gap: 60px; padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .footer-brand .nav-logo { color: var(--white); display: block; margin-bottom: 16px; font-size: 1.6rem; }
+  .footer-desc { font-size: 0.82rem; line-height: 1.8; font-weight: 300; max-width: 280px; }
+  .footer-social { display: flex; gap: 12px; margin-top: 24px; }
+  .social-btn {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(255,255,255,0.08); display: flex; align-items: center;
+    justify-content: center; font-size: 1rem; text-decoration: none;
+    transition: background 0.25s;
+  }
+  .social-btn:hover { background: var(--gold); }
+  .footer-col h4 {
+    font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600;
+    color: var(--white); margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.82rem; font-weight: 300; transition: color 0.25s; }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom {
+    max-width: 1100px; margin: 24px auto 0;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.75rem; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom span { color: var(--gold); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  @keyframes pulse-wa {
+    0%, 100% { box-shadow: 0 6px 24px rgba(37,211,102,0.4); }
+    50% { box-shadow: 0 6px 36px rgba(37,211,102,0.6), 0 0 0 12px rgba(37,211,102,0.1); }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-visual { height: 50vh; }
+    .cake-display { width: 220px; height: 220px; font-size: 6rem; }
+    .cake-tag { font-size: 0.7rem; padding: 8px 12px; }
+    .features-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
+    .feature-card:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .feature-card:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .order-inner, .about-inner, .contact-inner, .testimonials-grid { grid-template-columns: 1fr; gap: 40px; }
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .hero-content { padding: 60px 5%; }
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+    .form-row { grid-template-columns: 1fr; }
+    .about-circle { width: 220px; height: 220px; font-size: 5rem; }
+  }
+  @media (max-width: 560px) {
+    .gallery-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .feature-card:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .feature-card:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">The <span>Cakeflix</span></a>
+  <ul class="nav-links">
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#order">Order</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#order" class="nav-cta">Order a Cake ✦</a>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Lucknow's Sweetest Secret</div>
+    <h1>Custom Cakes for <em>Every</em> Occasion</h1>
+    <p class="hero-sub">Handcrafted with love, designed just for you. Every slice tells a story — let us create yours.</p>
+    <div class="hero-btns">
+      <a href="#order" class="btn-primary">✦ Order Now</a>
+      <a href="#gallery" class="btn-outline">View Designs →</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Happy Customers</div>
+      </div>
+      <div>
+        <div class="stat-num">258</div>
+        <div class="stat-label">Creations Made</div>
+      </div>
+      <div>
+        <div class="stat-num">5★</div>
+        <div class="stat-label">Avg Rating</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="cake-tag tag-1"><div class="dot"></div>Custom Design</div>
+    <div class="cake-tag tag-2"><div class="dot"></div>Fresh Daily</div>
+    <div class="cake-tag tag-3"><div class="dot"></div>Same Day Order</div>
+    <div class="cake-display">🎂</div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<div class="features">
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">🎨</span>
+      <div class="feature-title">Custom Designs</div>
+      <p class="feature-text">Every cake is sketched, styled, and sculpted to match your vision perfectly.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🌿</span>
+      <div class="feature-title">Fresh Ingredients</div>
+      <p class="feature-text">Premium, locally sourced ingredients baked fresh for every single order.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🚀</span>
+      <div class="feature-title">Fast Delivery</div>
+      <p class="feature-text">Pan Lucknow delivery with careful packaging to keep your cake perfect.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💬</span>
+      <div class="feature-title">WhatsApp Orders</div>
+      <p class="feature-text">Message us anytime — quick quotes, easy ordering, personal consultation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="gallery-header reveal">
+    <div class="section-label">Our Creations</div>
+    <h2 class="section-title">Cakes That <em>Tell Stories</em></h2>
+    <p class="section-sub" style="margin:0 auto;">Each creation is a masterpiece crafted with patience, passion, and a whole lot of sugar.</p>
+    <div class="gallery-tabs">
+      <button class="tab active" onclick="filterTab(this,'all')">All Cakes</button>
+      <button class="tab" onclick="filterTab(this,'birthday')">🎂 Birthday</button>
+      <button class="tab" onclick="filterTab(this,'theme')">🎭 Theme Cakes</button>
+      <button class="tab" onclick="filterTab(this,'custom')">✨ Custom</button>
+    </div>
+  </div>
+  <div class="gallery-grid" id="cakeGrid">
+    <div class="cake-card reveal" data-cat="birthday">
+      <div class="cake-img bg-pink">🎂</div>
+      <div class="cake-info">
+        <div class="cake-name">Classic Birthday Dream</div>
+        <div class="cake-desc">Vanilla sponge, whipped cream frosting, pastel sprinkles & fondant florals</div>
+        <div class="cake-price">
+          <span class="price">₹ 850+</span>
+          <button class="order-mini" onclick="orderThis('Classic Birthday Dream')">Order ↗</button>
+        </div>
+      </div>
+    </div>
+    <div class="cake-card reveal" data-cat="theme">
+      <div class="cake-img bg-lav">🦄</div>
+      <div class="cake-info">
+        <div class="cake-name">Unicorn Fantasy</div>
+        <div class="cake-desc">Rainbow layers, shimmer frosting, edible glitter & gold horn centrepiece</div>
+        <div class="cake-price">
+          <span class="price">₹ 1,400+</span>
+          <button class="order-mini" onclick="orderThis('Unicorn Fantasy')">Order ↗</button>
+        </div>
+      </div>
+    </div>
+    <div class="cake-card reveal" data-cat="custom">
+      <div class="cake-img bg-mint">💍</div>
+      <div class="cake-info">
+        <div class="cake-name">Engagement Bloom</div>
+        <div class="cake-desc">Two-tier fondant cake with fresh rose accents and gold leaf detailing</div>
+        <div class="cake-price">
+          <span class="price">₹ 2,200+</span>
+          <button class="order-mini" onclick="orderThis('Engagement Bloom')">Order ↗</button>
+        </div>
+      </div>
+    </div>
+    <div class="cake-card reveal" data-cat="theme">
+      <div class="cake-img bg-peach">🚀</div>
+      <div class="cake-info">
+        <div class="cake-name">Galaxy Explorer</div>
+        <div class="cake-desc">Galaxy mirror glaze, edible planets, cosmic dust & nebula swirl interior</div>
+        <div class="cake-price">
+          <span class="price">₹ 1,800+</span>
+          <button class="order-mini" onclick="orderThis('Galaxy Explorer')">Order ↗</button>
+        </div>
+      </div>
+    </div>
+    <div class="cake-card reveal" data-cat="birthday">
+      <div class="cake-img bg-sky">🧁</div>
+      <div class="cake-info">
+        <div class="cake-name">Cupcake Bouquet</div>
+        <div class="cake-desc">12 handcrafted cupcakes styled as a flower bouquet — perfect gift alternative</div>
+        <div class="cake-price">
+          <span class="price">₹ 950+</span>
+          <button class="order-mini" onclick="orderThis('Cupcake Bouquet')">Order ↗</button>
+        </div>
+      </div>
+    </div>
+    <div class="cake-card reveal" data-cat="custom">
+      <div class="cake-img bg-yellow">👶</div>
+      <div class="cake-info">
+        <div class="cake-name">Baby Shower Bliss</div>
+        <div class="cake-desc">Soft pastel three-tier with gender reveal centre, fondant baby topper</div>
+        <div class="cake-price">
+          <span class="price">₹ 3,200+</span>
+          <button class="order-mini" onclick="orderThis('Baby Shower Bliss')">Order ↗</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<section class="order-section" id="order">
+  <div class="order-inner">
+    <div class="order-left reveal">
+      <div class="section-label">Place Your Order</div>
+      <h2 class="section-title">Your Dream Cake<br><em>Awaits</em></h2>
+      <p class="section-sub">Fill in the details below and we'll get back to you with a personalised quote within 2 hours.</p>
+      <div class="order-perks">
+        <div class="perk"><div class="perk-icon">🕐</div>Response within 2 hours</div>
+        <div class="perk"><div class="perk-icon">🎨</div>Free design consultation</div>
+        <div class="perk"><div class="perk-icon">🚗</div>Home delivery available</div>
+        <div class="perk"><div class="perk-icon">💳</div>Easy UPI & online payment</div>
+      </div>
+    </div>
+    <div class="order-form reveal">
+      <div class="form-title">🍰 Custom Order Form</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="f-name" placeholder="Priya Sharma">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="f-phone" placeholder="+91 98765 43210">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cake Type</label>
+          <select id="f-type">
+            <option value="">Select Type</option>
+            <option>Birthday Cake</option>
+            <option>Wedding Cake</option>
+            <option>Theme Cake</option>
+            <option>Anniversary Cake</option>
+            <option>Baby Shower Cake</option>
+            <option>Custom Design</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Flavor</label>
+          <select id="f-flavor">
+            <option value="">Select Flavor</option>
+            <option>Vanilla</option>
+            <option>Chocolate</option>
+            <option>Red Velvet</option>
+            <option>Butterscotch</option>
+            <option>Strawberry</option>
+            <option>Black Forest</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Required Date</label>
+          <input type="date" id="f-date">
+        </div>
+        <div class="form-group">
+          <label>Number of People</label>
+          <select id="f-size">
+            <option value="">Serves...</option>
+            <option>4–6 people (0.5 kg)</option>
+            <option>8–10 people (1 kg)</option>
+            <option>15–20 people (2 kg)</option>
+            <option>25+ people (3 kg+)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Special Instructions</label>
+        <textarea id="f-note" placeholder="Tell us your vision — colours, theme, message on cake..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Reference Image (optional)</label>
+        <label class="upload-area" for="f-img">
+          <input type="file" id="f-img" accept="image/*">
+          <span class="upload-icon">📷</span>
+          <div class="upload-text">Drop your inspiration image here or <strong>browse</strong></div>
+        </label>
+      </div>
+      <button class="btn-whatsapp" onclick="sendWhatsApp()">
+        <span class="whatsapp-icon">💬</span> Send Order on WhatsApp
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="reveal">
+      <div class="section-label">Our Story</div>
+      <h2 class="section-title">Made with <em>Heart,</em><br>Delivered with Love</h2>
+      <div class="about-body">
+        <p>The Cakeflix was born from one simple belief: every celebration deserves a cake as unique as the person being celebrated. Based in the heart of Gomti Nagar, Lucknow, we are a home bakery crafted with passion and an obsession for detail.</p>
+        <p>Every cake is handmade — from the sponge to the last fondant flower — using only fresh, quality ingredients. We don't believe in factory shortcuts or frozen bases. What you get is entirely bespoke, made to order, and made to amaze.</p>
+        <p>We're Lucknow's sweetest secret, and we'd love to be part of your story.</p>
+      </div>
+      <a href="#order" class="btn-primary">Start Your Order ✦</a>
+    </div>
+    <div class="about-visual reveal">
+      <div class="about-circle">🎂</div>
+      <div class="about-badge b1">🏆 100% Handmade</div>
+      <div class="about-badge b2">📍 Gomti Nagar, Lucknow</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="testimonials-header reveal">
+    <div class="section-label">Love from Customers</div>
+    <h2 class="section-title">What They're <em>Saying</em></h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">The unicorn cake for my daughter's birthday was absolutely magical. She couldn't stop smiling — and neither could I. The detail work was insane!</p>
+      <div class="testi-author">
+        <div class="author-avatar bg-pink">🙋‍♀️</div>
+        <div>
+          <div class="author-name">Priya Agarwal</div>
+          <div class="author-loc">Hazratganj, Lucknow</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">Ordered a galaxy mirror glaze cake for my husband's birthday. The taste was just as extraordinary as the look. Highly recommend to everyone!</p>
+      <div class="testi-author">
+        <div class="author-avatar" style="background:linear-gradient(135deg,#fde8f2,#f8c8dc)">💁‍♀️</div>
+        <div>
+          <div class="author-name">Ritu Verma</div>
+          <div class="author-loc">Aliganj, Lucknow</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">The engagement cake was a showstopper at our ceremony. Everyone kept asking who made it. Perfect taste, perfect design, perfect experience!</p>
+      <div class="testi-author">
+        <div class="author-avatar" style="background:linear-gradient(135deg,#ede8fd,#d5c8f8)">🙋‍♂️</div>
+        <div>
+          <div class="author-name">Arjun Mehta</div>
+          <div class="author-loc">Gomti Nagar, Lucknow</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <div class="section-label">Find Us</div>
+      <h2 class="section-title">Get in <em>Touch</em></h2>
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label">Address</div>
+            <div class="contact-val">B-1/21 Vineet Khand, Gomti Nagar<br>Lucknow, Uttar Pradesh — 226010</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📱</div>
+          <div>
+            <div class="contact-label">WhatsApp & Call</div>
+            <div class="contact-val">+91 XXXXX XXXXX</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div>
+            <div class="contact-label">Working Hours</div>
+            <div class="contact-val">Mon–Sat: 9 AM – 9 PM<br>Sunday: 10 AM – 6 PM</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📸</div>
+          <div>
+            <div class="contact-label">Instagram</div>
+            <div class="contact-val">@thecakeflix</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="contact-map">
+        <div class="map-overlay">
+          <div class="map-pin">📍</div>
+          <div class="map-label">Gomti Nagar, Lucknow</div>
+        </div>
+      </div>
+      <a href="https://wa.me/91XXXXXXXXXX" class="btn-whatsapp" style="margin-top:20px; text-decoration:none; display:flex;">
+        <span class="whatsapp-icon">💬</span> Chat with Us on WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">The <span>Cakeflix</span></a>
+      <p class="footer-desc">Where binge-worthy meets bakery. Artisanal home bakes, handmade with heart, from Lucknow's sweetest kitchen.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn">📸</a>
+        <a href="#" class="social-btn">💬</a>
+        <a href="#" class="social-btn">🎬</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#order">Order Now</a></li>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Cake Types</h4>
+      <ul>
+        <li><a href="#gallery">Birthday Cakes</a></li>
+        <li><a href="#gallery">Wedding Cakes</a></li>
+        <li><a href="#gallery">Theme Cakes</a></li>
+        <li><a href="#gallery">Custom Design</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2025 <span>The Cakeflix</span>. All rights reserved. Made with 🎂 in Lucknow.</div>
+    <div>Designed for sweetness & delight</div>
+  </div>
+</footer>
+
+<!-- WhatsApp Float -->
+<a href="https://wa.me/91XXXXXXXXXX" class="whatsapp-float" title="Order on WhatsApp">💬</a>
+
+<script>
+  // Navbar scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Gallery filter
+  function filterTab(btn, cat) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.cake-card').forEach(card => {
+      const show = cat === 'all' || card.dataset.cat === cat;
+      card.style.display = show ? 'block' : 'none';
+    });
+  }
+
+  // Mini order button
+  function orderThis(name) {
+    document.getElementById('f-type').focus();
+    document.querySelector('#order').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      document.getElementById('f-note').value = `I'm interested in the "${name}" design!`;
+    }, 600);
+  }
+
+  // WhatsApp order
+  function sendWhatsApp() {
+    const name = document.getElementById('f-name').value || 'Customer';
+    const phone = document.getElementById('f-phone').value || '';
+    const type = document.getElementById('f-type').value || 'Not specified';
+    const flavor = document.getElementById('f-flavor').value || 'Not specified';
+    const date = document.getElementById('f-date').value || 'Not specified';
+    const size = document.getElementById('f-size').value || 'Not specified';
+    const note = document.getElementById('f-note').value || '';
+
+    const msg = encodeURIComponent(
+      `🎂 *New Cake Order — The Cakeflix*\n\n` +
+      `👤 Name: ${name}\n📱 Phone: ${phone}\n🎂 Cake Type: ${type}\n` +
+      `🍫 Flavor: ${flavor}\n📅 Date Needed: ${date}\n👥 Serves: ${size}` +
+      (note ? `\n\n📝 Notes: ${note}` : '')
+    );
+    window.open(`https://wa.me/91XXXXXXXXXX?text=${msg}`, '_blank');
+  }
+
+  // Upload label
+  document.getElementById('f-img').addEventListener('change', function() {
+    const label = this.closest('.upload-area').querySelector('.upload-text');
+    if (this.files[0]) label.innerHTML = `✅ <strong>${this.files[0].name}</strong> selected`;
+  });
+
+  // Mobile menu toggle (simple)
+  function toggleMenu() {
+    const links = document.querySelector('.nav-links');
+    const cta = document.querySelector('.nav-cta');
+    if (links.style.display === 'flex') {
+      links.style.display = ''; cta.style.display = '';
+    } else {
+      links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--cream);padding:24px 5%;gap:20px;border-bottom:1px solid rgba(248,200,220,0.3);z-index:200;';
+      cta.style.cssText = 'display:block;margin:0 5% 20px;text-align:center;';
+    }
+  }
+
+  // Set min date to today
+  const dateInput = document.getElementById('f-date');
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.min = today;
+</script>
+</body>
+</html>
